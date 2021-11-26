@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title> Coviddata </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body></br></br></br></br></br>
+         <div align="center">
+          <div align="center" class="border">
+             <div class="header">
+                <h1 class="word">TestResults</h1>
+             </div></br></br></br>
+                <h2 class="word">
+                <form action="{{ url_for('testresults') }}" method="post">
+                    <input id="uniqueId" name="uniqueId" type="text" placeholder="UniqueId" class="textbox"/></br></br>
+                    <input type="submit" class="btn" value="Submit"></br></br>
+                </form>
+                </h2>
+          </div>
+        </div>
+    </body>
+</html>
+
