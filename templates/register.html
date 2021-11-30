@@ -9,18 +9,35 @@
           <div align="center" class="border">
              <div class="header">
                 <h1 class="word">Register</h1>
-             </div></br></br></br>
+             </div>
             <h2 class="word">
                 <form action="{{ url_for('register') }}" method="post">
                   <div class="msg">{{ msg }}</div>
-                    <input id="name" name="name" type="text" placeholder="name" class="textbox"/></br></br>
+                    <input id="name" name="name" type="text" placeholder="Name" class="textbox"/></br>
+                    <input id="dob" name="dob" type="text" placeholder="Date of birth" class="textbox"/></br>
                     <input id="email" name="email" type="text" placeholder="Email ID" class="textbox"/></br></br>
-                    <input id="test_results" name="test_results" type="text" placeholder="test_results" class="textbox"/></br></br>
-                    <input id="vaccinedetails" name="vaccinedetails" type="text" placeholder="vaccinedetails" class="textbox"/></br></br>
-                    <input type="submit" class="btn" value="Sign Up"></br>
+                    <div>
+                        <div>
+                                <input type="radio" id="vaccinedetails" name="coviddata" class="bottom" data-rel="vaccine" value="vaccine"/> vaccine details
+                                <span class="vaccine content">
+                                    <input id="dosenumber" name="dosenumber" type="text" placeholder="Which Dose"  class="textbox"/></br>
+                                    <input id="vaccinedate" name="vaccinedate" type="text" placeholder="Date" class="textbox"/></br>
+                                    <input id="vaccinename" name="vaccinename" type="text" placeholder="Vaccine Name" class="textbox"/></br></br>
+                                </span>
+                        </div>
+                        <div>
+                            <input type="radio" id="testresults"  name="coviddata" data-rel="test" value="test"/> test results
+                            <span class="test content">
+                                <input id="testdate" name="testdate" type="text" placeholder="Date" class="textbox"/></br>
+                               <input id="testresult" name="testresult" type="text" placeholder="Result" class="textbox"/></br></br>
+                            </span>
+                        </div>
+                    </div></br>
+                    <input type="submit" class="btn" value="Register"></br></br>
+                    <a href="{{ url_for('logout') }}">Logout</a>
                 </form>
+
             </h2>
-            <p class="bottom">Already have an account?  <a class="bottom" href="{{url_for('login')}}"> Sign In here</a></p>
           </div>
         </div>
     </body>
