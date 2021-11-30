@@ -1,21 +1,19 @@
 .header{
-                padding: 5px 120px;
-                width: 150px;
-                height: 70px;
-                background-color: #236B8E;
+                padding: 10px 30px;
+                color: #236B8E;
             }
 
             .border{
                 padding: 80px 50px;
                 width: 400px;
-                height: 450px;
+                height: 600px;
                 border: 1px solid #236B8E;
                 border-radius: 0px;
                 background-color: #9AC0CD;
             }
 
             .btn {
-                padding: 10px 40px;
+                padding: 10px 30px;
                 background-color: #236B8E;
                 color: #FFFFFF;
                 font-weight: bold;
@@ -37,7 +35,7 @@
             }
 
             .word{
-                color: #FFFFFF;
+                color: #236B8E;
                 font-style: oblique;
                 font-weight: bold;
             }
@@ -46,4 +44,12 @@
                 color: #236B8E;
                 font-style: oblique;
                 font-weight: bold;
+            }
+
+            .content {
+                  display: none;
+                }
+                input:checked + span,
+                input:checked + input {
+                  display: block;
             }
