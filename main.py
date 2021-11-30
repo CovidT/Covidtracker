@@ -1,5 +1,3 @@
-# Store this code in 'app.py' file
-
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
@@ -15,6 +13,24 @@ app.config['MYSQL_DB'] = 'covidlogin'
 
 mysql = MySQL(app)
 
+def send_email(receiver_email, uniqueid):
+    import smtplib, ssl
+
+    port = 465  # For SSL
+    smtp_server = "smtp.gmail.com"
+    sender_email = "gov.coviddetails@gmail.com"  # Enter your address
+    password = "testcoen6311"
+    message = "Your UniqueId %s to view the covid details" % uniqueid
+
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+        smtpserver = smtplib.SMTP("smtp.gmail.com", 587)
+        smtpserver.ehlo()
+        smtpserver.starttls()
+        smtpserver.ehlo()
+        smtpserver.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, message)
+
 @app.route('/')
 def homepage():
     return render_template('homepage.html')
@@ -25,15 +41,16 @@ def login():
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         username = request.form['username']
         password = request.form['password']
+        tablename = "government_login"
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE username = % s AND password = % s', (username, password,))
+        cmd = 'SELECT * FROM %s WHERE username = "%s" AND password = "%s"' % (tablename, username, password)
+        cursor.execute(cmd)
         account = cursor.fetchone()
         if account:
             session['loggedin'] = True
-            session['id'] = account['id']
-            session['username'] = account['username']
-            msg = 'Logged in successfully !'
-            return render_template('register.html', msg=msg)
+            #session['username'] = account['username']
+            #session['password'] = account['password']
+            return render_template('register.html')
         else:
             msg = 'Incorrect username / password !'
     return render_template('login.html', msg=msg)
@@ -48,11 +65,9 @@ def vaccine():
         cursor.execute('SELECT * FROM accounts WHERE uniqueId = % s', (uniqueId,))
         account = cursor.fetchone()
         if account:
-            #session['loggedin'] = True
-            session['uniqueid'] = account['uniqueid']
-            #session['username'] = account['username']
+            #session['uniqueid'] = account['uniqueid']
             msg = 'UniqueId is validated'
-            return render_template('index.html', msg=msg)
+            return render_template('vaccinedetails.html', msg=msg)
         else:
             msg = 'Incorrect UniqueId'
     return render_template('vaccine.html', msg=msg)
@@ -66,11 +81,9 @@ def testresults():
         cursor.execute('SELECT * FROM accounts WHERE uniqueId = % s', (uniqueId,))
         account = cursor.fetchone()
         if account:
-            #session['loggedin'] = True
-            session['uniqueid'] = account['uniqueid']
-            #session['username'] = account['username']
+            #session['uniqueid'] = account['uniqueid']
             msg = 'UniqueId is validated'
-            return render_template('index.html', msg=msg)
+            return render_template('testdetails.html', msg=msg)
         else:
             msg = 'Incorrect UniqueId'
     return render_template('testresults.html', msg=msg)
@@ -78,28 +91,80 @@ def testresults():
 @app.route('/logout')
 def logout():
     session.pop('loggedin', None)
-    session.pop('id', None)
     session.pop('username', None)
-    return redirect(url_for('login'))
-
+    session.pop('password', None)
+    return redirect(url_for('homepage'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     msg = ''
-    if request.method == 'POST' and 'name' in request.form and 'email' in request.form and ('testresults' or 'vaccinedetails') in request.form:
+    if request.method == 'POST' and 'name' in request.form and 'email' in request.form and 'dob' in request.form:
         name = request.form['name']
+        dob = request.form['dob']
         email = request.form['email']
-        test_result = request.form['testresults']
-        vaccinedetails = request.form['vaccinedetails']
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE name = % s', (name,))
-        account = cursor.fetchone()
-        if account:
-            msg = 'Account already exists !'
+        uniqueid = name[:4] + dob[len(dob)-2:len(dob)]
+        #send_email(email, uniqueid)
+        selected_field = (request.form["coviddata"])
+        if selected_field == 'vaccine':
+            vaccine_dose = request.form['dosenumber']
+            vaccine_date = request.form['vaccinedate']
+            vaccine_name = request.form['vaccinename']
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cmd = 'SELECT * FROM vaccine WHERE uniqueid = "%s"' % uniqueid
+            cursor.execute(cmd)
+            account = cursor.fetchone()
+            if account:
+                msg = 'Account already exists !'
+            else:
+                print(vaccine_dose, vaccine_date, vaccine_name)
+                session['name'] = account['name']
+                session['email'] = account['email']
+                session['dateofbirth'] = account['dateofbirth']
+                session['firstdose'] = account['firstdose']
+                session['firstdosename'] = account['firstdosename']
+                session['firstdate'] = account['firstdate']
+                session['seconddose'] = account['seconddose']
+                session['seconddate'] = account['seconddate']
+                session['seconddosename'] = account['seconddosename']
+                if vaccine_dose == 1:
+                    cmd = "INSERT INTO vaccine (name, dateofbirth, email, firstdose, firstdate, firstdosename, UniqueId) VALUES ('%s', '%s', '%s', %s, '%s', '%s', '%s')" % (name, dob, email,
+                                                                                                              vaccine_dose, vaccine_date, vaccine_name, uniqueid)
+                elif vaccine_dose == 2:
+                    cmd = "INSERT INTO vaccine (name, dateofbirth, email, seconddose, seconddate, seconddosename, UniqueId) VALUES ('%s', '%s', '%s', %s, '%s', '%s', '%s')" % (name, dob, email,
+                                                                                                              vaccine_dose, vaccine_date, vaccine_name, uniqueid)
+                cursor.execute(cmd)
+                mysql.connection.commit()
+                msg = 'You have successfully registered !'
+        elif selected_field == 'test':
+            test_date = request.form['testdate']
+            test_result = request.form['testresult']
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cmd = 'SELECT * FROM vaccine WHERE uniqueid = "%s"' % uniqueid
+            cursor.execute(cmd)
+            account = cursor.fetchone()
+            if account:
+                msg = 'Account already exists !'
+                md = "INSERT INTO test (name, dateofbirth, email, date, result, UniqueId) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')" % (
+                                        name, dob, email, test_date, test_result, uniqueid)
+                cursor.execute(cmd)
+                mysql.connection.commit()
+                msg = 'You have successfully registered !'
+            else:
+                cmd = "INSERT INTO test (name, dateofbirth, email, date, result, UniqueId) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')" % (name, dob, email, test_date, test_result, uniqueid)
+                cursor.execute(cmd)
+                mysql.connection.commit()
+                msg = 'You have successfully registered !'
+                cmd = 'SELECT * FROM vaccine WHERE uniqueid = "%s"' % uniqueid
+                cursor.execute(cmd)
+                account = cursor.fetchone()
+                session['name'] = account['name']
+                session['email'] = account['email']
+                session['dateofbirth'] = account['dateofbirth']
+                session['date'] = account['date']
+                session['result'] = account['result']
         else:
-            cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s)', (name, email, test_result, vaccinedetails,))
-            mysql.connection.commit()
-            msg = 'You have successfully registered !'
+            msg = "Please select vaccine details or test results to register"
+
     elif request.method == 'POST':
         msg = 'Please fill out the form !'
     return render_template('register.html', msg=msg)
