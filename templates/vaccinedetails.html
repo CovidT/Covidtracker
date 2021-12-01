@@ -9,16 +9,16 @@
           <div align="center" class="border">
              <div class="header">
                 <h1 class="word">Vaccine Details</h1>
-             </div></br></br></br>
-                <div class="bottom">
-                     Hi {{session.name}}!! Your Vaccination details</br></br> Name: {{session.name}}</br>
+             </div></br>
+                <div class="word">
+                     Name: {{session.name}}</br>
                      Email Id: {{session.email}}</br>
                      Date of Birth: {{session.dateofbirth}}</br>
                      First dose date: {{session.firstdate}} </br>
                      First vaccine name: {{session.firstdosename}}</br>
                      Second dose date: {{session.seconddate}} </br>
                      Second vaccine name: {{session.seconddosename}}</br>
-                </div></br>
+                </div></br></br>
                 <a href="{{ url_for('vaccine') }}" class="btn">View another Report</a>
           </div>
         </div>

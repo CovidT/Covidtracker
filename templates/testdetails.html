@@ -9,15 +9,15 @@
           <div align="center" class="border">
              <div class="header">
                 <h1 class="word">COVID Test Results</h1>
-             </div></br></br></br>
-                <div class="bottom">
-                     Hi {{session.name}}!! Your Covid test result are below</br></br> Name: {{session.name}}</br>
+             </div></br>
+                <div class="word">
+                     Name: {{session.name}}</br>
                      Email Id: {{session.email}}</br>
                      Date of Birth: {{session.dateofbirth}}</br>
                      Date: {{session.date}} </br>
                      Result: {{session.result}}</br>
-                </div></br>
-                <a href="{{ url_for('vaccine') }}" class="btn">View another Report</a>
+                </div></br></br>
+                <a href="{{ url_for('testresults') }}" class="btn">View another Report</a>
           </div>
         </div>
     </body>
