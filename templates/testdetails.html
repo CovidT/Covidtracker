@@ -1,10 +1,12 @@
 <html>
     <head>
-        <meta charset="UTF-8">
-        <title> Index </title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <style>
+            <meta charset="UTF-8">
+            <title> Index </title>
+            <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        </style>
     </head>
-    <body></br></br></br></br></br>
+    <body background="static/corona.png"></br></br></br></br></br>
         <div align="center">
           <div align="center" class="border">
              <div class="header">
@@ -14,6 +16,7 @@
                      Name: {{session.name}}</br>
                      Email Id: {{session.email}}</br>
                      Date of Birth: {{session.dateofbirth}}</br>
+                     Location: {{session.location}}</br>
                      Date: {{session.date}} </br>
                      Result: {{session.result}}</br>
                 </div></br></br>

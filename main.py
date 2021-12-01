@@ -73,6 +73,7 @@ def vaccine():
             session['seconddose'] = account['seconddose']
             session['seconddate'] = account['seconddate']
             session['seconddosename'] = account['seconddosename']
+            session['location'] = account['location']
             return render_template('vaccinedetails.html', msg=msg)
         else:
             msg = 'Incorrect UniqueId'
@@ -94,6 +95,7 @@ def testresults():
             session['dateofbirth'] = account['dateofbirth']
             session['date'] = account['date']
             session['result'] = account['Result']
+            session['location'] = account['location']
             return render_template('testdetails.html', msg=msg)
         else:
             msg = 'Incorrect UniqueId'
@@ -115,7 +117,6 @@ def register():
         email = request.form['email']
         location = request.form['location']
         uniqueid = name[:4] + dob[len(dob)-2:len(dob)]
-        #send_email(email, uniqueid)
         selected_field = (request.form["coviddata"])
         if selected_field == 'vaccine':
             vaccine_dose = request.form['dosenumber']
@@ -126,7 +127,11 @@ def register():
             cursor.execute(cmd)
             account = cursor.fetchone()
             if account:
-                msg = 'Account already exists !'
+                cmd = "UPDATE vaccine SET seconddose='%s', seconddate='%s', seconddosename='%s' WHERE (UniqueId = '%s');" % (
+                    vaccine_dose, vaccine_date, vaccine_name, uniqueid)
+                cursor.execute(cmd)
+                mysql.connection.commit()
+                msg = 'You have successfully registered !'
             else:
                 if vaccine_dose == '1':
                     cmd = "INSERT INTO vaccine (name, dateofbirth, email, firstdose, date, firstdosename, UniqueId, location) VALUES ('%s', '%s', '%s', %s, '%s', '%s', '%s', '%s')" % (name, dob, email,

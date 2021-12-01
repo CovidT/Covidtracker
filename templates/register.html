@@ -1,12 +1,12 @@
 <html>
     <head>
-        <meta charset="UTF-8">
-        <title> Register </title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+            <meta charset="UTF-8">
+            <title> Register </title>
+            <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
-    <body></br></br></br></br></br>
+    <body background="static/corona.png"></br></br></br></br></br>
         <div align="center">
-          <div align="center" class="border">
+          <div align="center">
              <div class="header">
                 <h1 class="word">Register</h1>
              </div>
@@ -19,7 +19,7 @@
                     <input id="location" name="location" type="text" placeholder="Location" class="textbox"/></br></br>
                     <div>
                         <div>
-                                <input type="radio" id="vaccinedetails" name="coviddata" class="bottom" data-rel="vaccine" value="vaccine"/> vaccine details
+                            <input type="radio" id="vaccinedetails" name="coviddata" class="bottom" data-rel="vaccine" value="vaccine"/> vaccine details
                                 <span class="vaccine content">
                                     <input id="dosenumber" name="dosenumber" type="text" placeholder="Which Dose"  class="textbox"/></br>
                                     <input id="vaccinedate" name="vaccinedate" type="text" placeholder="Date" class="textbox"/></br>
@@ -37,7 +37,6 @@
                     <input type="submit" class="btn" value="Register"></br></br>
                     <a href="{{ url_for('logout') }}">Logout</a>
                 </form>
-
             </h2>
           </div>
         </div>

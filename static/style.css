@@ -9,7 +9,7 @@
                 height: 600px;
                 border: 1px solid #236B8E;
                 border-radius: 0px;
-                background-color: #9AC0CD;
+                background-color: #87CEEB;
             }
 
             .btn {
@@ -22,20 +22,20 @@
 
             .textbox{
                 padding: 10px 40px;
-                background-color: #236B8E;
-                text-color: #FFFFFF;
+                background-color: #87CEEB;
+                text-color: #00008B;
                 border-radius: 10px;
             }
 
             ::placeholder {
-                color: #FFFFFF;
+                color: #00008B;
                 opacity: 1;
                 font-style: oblique;
                 font-weight: bold;
             }
 
             .word{
-                color: #236B8E;
+                color: #00008B;
                 font-style: oblique;
                 font-weight: bold;
             }
